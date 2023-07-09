@@ -1,15 +1,35 @@
 version: '3.1'
 services:
-  db:
-    image: mongo:latest
-    container_name: next-todo-app-db
-    restart: always
+  mongo-express:
+    image: mongo-express
     ports:
-      - 27017:27017
-    volumes:
-      - ./data:/data/db
+      - 8081:8081
     env_file:
-      - ./.env.local
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - .env.local
+    links:
+      - mongo-db
+    networks:
+      - mongo-compose-network
+    restart: always
+    depends_on:
+      - mongo-db
+
+  mongo-db:
+    image: mongo:latest
+    container_name: mongo
+    env_file:
+      - .env.local
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - mongo-compose-network
+
+
+networks:
+    mongo-compose-network:
+      driver: bridge
+
+volumes:
+  mongodb_data_container:

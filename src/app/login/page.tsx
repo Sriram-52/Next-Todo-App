@@ -15,10 +15,17 @@ export default function Signup() {
 		email: "",
 	});
 
+	const router = useRouter();
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		// const res = await axios.post("/api/users", user);
-		// console.log(res);
+		try {
+			const res = await axios.post("/api/auth/login", user);
+			console.log(res);
+			router.push("/profile");
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
