@@ -32,9 +32,13 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
-			expiresIn: "1d",
-		});
+		const token = jwt.sign(
+			{ id: user._id, email: user.email, username: user.username },
+			process.env.JWT_SECRET!,
+			{
+				expiresIn: "1d",
+			}
+		);
 
 		const response = NextResponse.json(
 			{
